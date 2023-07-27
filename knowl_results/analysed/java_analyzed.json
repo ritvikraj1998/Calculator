@@ -1,0 +1,555 @@
+{
+    "result": {
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/App.java": {
+            "classes": [{
+                "endLine": 10,
+                "constructors": [],
+                "parentClasses": [],
+                "code": "public class App {\n\n    public static void main(String[] args) {\n        new CalculatorUI();\n    }\n}",
+                "functions": [{
+                    "endLine": 9,
+                    "code": "public static void main(String[] args) {\n    new CalculatorUI();\n}",
+                    "signature": "main(String[])",
+                    "startLine": 7,
+                    "Name": "main"
+                }],
+                "startLine": 5,
+                "name": "App",
+                "type": "class",
+                "properties": [],
+                "innerClasses": []
+            }],
+            "statements": [],
+            "funcs": []
+        },
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/test/java/com/houarizegai/calculator/CalculatorUITest.java": {
+            "classes": [{
+                "endLine": 24,
+                "constructors": [],
+                "parentClasses": [],
+                "code": "class CalculatorUITest {\n\n    private CalculatorUI calculatorUI;\n\n    @BeforeEach\n    void setUp() {\n        calculatorUI = new CalculatorUI();\n    }\n\n    @ParameterizedTest\n    @CsvSource({ \"3,5,+,8\", \"2,8,-,-6\", \"44.5,10,*,445\", \"320,5,/,64\", \"3,5,%,3\", \"5,3,^,125\" })\n    void testCalculation(double firstNumber, double secondNumber, char operator, double expectedResult) {\n        assertEquals(expectedResult, calculatorUI.calculate(firstNumber, secondNumber, operator));\n    }\n}",
+                "functions": [
+                    {
+                        "endLine": 17,
+                        "code": "@BeforeEach\nvoid setUp() {\n    calculatorUI = new CalculatorUI();\n}",
+                        "signature": "setUp()",
+                        "startLine": 14,
+                        "Name": "setUp"
+                    },
+                    {
+                        "endLine": 23,
+                        "code": "@ParameterizedTest\n@CsvSource({ \"3,5,+,8\", \"2,8,-,-6\", \"44.5,10,*,445\", \"320,5,/,64\", \"3,5,%,3\", \"5,3,^,125\" })\nvoid testCalculation(double firstNumber, double secondNumber, char operator, double expectedResult) {\n    assertEquals(expectedResult, calculatorUI.calculate(firstNumber, secondNumber, operator));\n}",
+                        "signature": "testCalculation(double, double, char, double)",
+                        "startLine": 19,
+                        "Name": "testCalculation"
+                    }
+                ],
+                "startLine": 10,
+                "name": "CalculatorUITest",
+                "type": "class",
+                "properties": ["private CalculatorUI calculatorUI;"],
+                "innerClasses": []
+            }],
+            "statements": [],
+            "funcs": []
+        },
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/ui/CalculatorUI.java": {
+            "classes": [{
+                "endLine": 586,
+                "constructors": [{
+                    "endLine": 82,
+                    "code": "public CalculatorUI() {\n    themesMap = ThemeLoader.loadThemes();\n    window = new JFrame(APPLICATION_TITLE);\n    window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);\n    window.setLocationRelativeTo(null);\n    int[] columns = { MARGIN_X, MARGIN_X + 90, MARGIN_X + 90 * 2, MARGIN_X + 90 * 3, MARGIN_X + 90 * 4 };\n    int[] rows = { MARGIN_Y, MARGIN_Y + 100, MARGIN_Y + 100 + 80, MARGIN_Y + 100 + 80 * 2, MARGIN_Y + 100 + 80 * 3, MARGIN_Y + 100 + 80 * 4 };\n    initInputScreen(columns, rows);\n    initButtons(columns, rows);\n    initCalculatorTypeSelector();\n    initThemeSelector();\n    window.setLayout(null);\n    window.setResizable(false);\n    window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\n    window.setVisible(true);\n}",
+                    "signature": "CalculatorUI()",
+                    "startLine": 62,
+                    "Name": "CalculatorUI"
+                }],
+                "parentClasses": [],
+                "code": "public class CalculatorUI {\n\n    private static final String FONT_NAME = \"Comic Sans MS\";\n\n    private static final String DOUBLE_OR_NUMBER_REGEX = \"([-]?\\\\d+[.]\\\\d*)|(\\\\d+)|(-\\\\d+)\";\n\n    private static final String APPLICATION_TITLE = \"Calculator\";\n\n    private static final int WINDOW_WIDTH = 410;\n\n    private static final int WINDOW_HEIGHT = 600;\n\n    private static final int BUTTON_WIDTH = 80;\n\n    private static final int BUTTON_HEIGHT = 70;\n\n    private static final int MARGIN_X = 20;\n\n    private static final int MARGIN_Y = 60;\n\n    private final JFrame window;\n\n    private JComboBox<String> comboCalculatorType;\n\n    private JComboBox<String> comboTheme;\n\n    private JTextField inputScreen;\n\n    private JButton btnC;\n\n    private JButton btnBack;\n\n    private JButton btnMod;\n\n    private JButton btnDiv;\n\n    private JButton btnMul;\n\n    private JButton btnSub;\n\n    private JButton btnAdd;\n\n    private JButton btn0;\n\n    private JButton btn1;\n\n    private JButton btn2;\n\n    private JButton btn3;\n\n    private JButton btn4;\n\n    private JButton btn5;\n\n    private JButton btn6;\n\n    private JButton btn7;\n\n    private JButton btn8;\n\n    private JButton btn9;\n\n    private JButton btnPoint;\n\n    private JButton btnEqual;\n\n    private JButton btnRoot;\n\n    private JButton btnPower;\n\n    private JButton btnLog;\n\n    private char selectedOperator = ' ';\n\n    // For calculate with Opt != (=)\n    private boolean go = true;\n\n    // Connect numbers in display\n    private boolean addToDisplay = true;\n\n    private double typedValue = 0;\n\n    private final Map<String, Theme> themesMap;\n\n    public CalculatorUI() {\n        themesMap = ThemeLoader.loadThemes();\n        window = new JFrame(APPLICATION_TITLE);\n        window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);\n        window.setLocationRelativeTo(null);\n        int[] columns = { MARGIN_X, MARGIN_X + 90, MARGIN_X + 90 * 2, MARGIN_X + 90 * 3, MARGIN_X + 90 * 4 };\n        int[] rows = { MARGIN_Y, MARGIN_Y + 100, MARGIN_Y + 100 + 80, MARGIN_Y + 100 + 80 * 2, MARGIN_Y + 100 + 80 * 3, MARGIN_Y + 100 + 80 * 4 };\n        initInputScreen(columns, rows);\n        initButtons(columns, rows);\n        initCalculatorTypeSelector();\n        initThemeSelector();\n        window.setLayout(null);\n        window.setResizable(false);\n        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\n        window.setVisible(true);\n    }\n\n    public double calculate(double firstNumber, double secondNumber, char operator) {\n        switch(operator) {\n            case '+':\n                return firstNumber + secondNumber;\n            case '-':\n                return firstNumber - secondNumber;\n            case '*':\n                return firstNumber * secondNumber;\n            case '/':\n                return firstNumber / secondNumber;\n            case '%':\n                return firstNumber % secondNumber;\n            case '^':\n                return Math.pow(firstNumber, secondNumber);\n            default:\n                return secondNumber;\n        }\n    }\n\n    private void initThemeSelector() {\n        comboTheme = createComboBox(themesMap.keySet().toArray(new String[0]), 230, 30, \"Theme\");\n        comboTheme.addItemListener(event -> {\n            if (event.getStateChange() != ItemEvent.SELECTED)\n                return;\n            String selectedTheme = (String) event.getItem();\n            applyTheme(themesMap.get(selectedTheme));\n        });\n        if (themesMap.entrySet().iterator().hasNext()) {\n            applyTheme(themesMap.entrySet().iterator().next().getValue());\n        }\n    }\n\n    private void initInputScreen(int[] columns, int[] rows) {\n        inputScreen = new JTextField(\"0\");\n        inputScreen.setBounds(columns[0], rows[0], 350, 70);\n        inputScreen.setEditable(false);\n        inputScreen.setBackground(Color.WHITE);\n        inputScreen.setFont(new Font(FONT_NAME, Font.PLAIN, 33));\n        window.add(inputScreen);\n    }\n\n    private void initCalculatorTypeSelector() {\n        comboCalculatorType = createComboBox(new String[] { \"Standard\", \"Scientific\" }, 20, 30, \"Calculator type\");\n        comboCalculatorType.addItemListener(event -> {\n            if (event.getStateChange() != ItemEvent.SELECTED)\n                return;\n            String selectedItem = (String) event.getItem();\n            switch(selectedItem) {\n                case \"Standard\":\n                    window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);\n                    btnRoot.setVisible(false);\n                    btnPower.setVisible(false);\n                    btnLog.setVisible(false);\n                    break;\n                case \"Scientific\":\n                    window.setSize(WINDOW_WIDTH + 80, WINDOW_HEIGHT);\n                    btnRoot.setVisible(true);\n                    btnPower.setVisible(true);\n                    btnLog.setVisible(true);\n                    break;\n            }\n        });\n    }\n\n    private void initButtons(int[] columns, int[] rows) {\n        btnC = createButton(\"C\", columns[0], rows[1]);\n        btnC.addActionListener(event -> {\n            inputScreen.setText(\"0\");\n            selectedOperator = ' ';\n            typedValue = 0;\n        });\n        btnBack = createButton(\"<-\", columns[1], rows[1]);\n        btnBack.addActionListener(event -> {\n            String str = inputScreen.getText();\n            StringBuilder str2 = new StringBuilder();\n            for (int i = 0; i < (str.length() - 1); i++) {\n                str2.append(str.charAt(i));\n            }\n            if (str2.toString().equals(\"\")) {\n                inputScreen.setText(\"0\");\n            } else {\n                inputScreen.setText(str2.toString());\n            }\n        });\n        btnMod = createButton(\"%\", columns[2], rows[1]);\n        btnMod.addActionListener(event -> {\n            if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()) || !go)\n                return;\n            typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n            if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                inputScreen.setText(String.valueOf((int) typedValue));\n            } else {\n                inputScreen.setText(String.valueOf(typedValue));\n            }\n            selectedOperator = '%';\n            go = false;\n            addToDisplay = false;\n        });\n        btnDiv = createButton(\"/\", columns[3], rows[1]);\n        btnDiv.addActionListener(event -> {\n            if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n                return;\n            if (go) {\n                typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n                if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                    inputScreen.setText(String.valueOf((int) typedValue));\n                } else {\n                    inputScreen.setText(String.valueOf(typedValue));\n                }\n                selectedOperator = '/';\n                go = false;\n                addToDisplay = false;\n            } else {\n                selectedOperator = '/';\n            }\n        });\n        btn7 = createButton(\"7\", columns[0], rows[2]);\n        btn7.addActionListener(event -> {\n            if (addToDisplay) {\n                if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                    inputScreen.setText(\"7\");\n                } else {\n                    inputScreen.setText(inputScreen.getText() + \"7\");\n                }\n            } else {\n                inputScreen.setText(\"7\");\n                addToDisplay = true;\n            }\n            go = true;\n        });\n        btn8 = createButton(\"8\", columns[1], rows[2]);\n        btn8.addActionListener(event -> {\n            if (addToDisplay) {\n                if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                    inputScreen.setText(\"8\");\n                } else {\n                    inputScreen.setText(inputScreen.getText() + \"8\");\n                }\n            } else {\n                inputScreen.setText(\"8\");\n                addToDisplay = true;\n            }\n            go = true;\n        });\n        btn9 = createButton(\"9\", columns[2], rows[2]);\n        btn9.addActionListener(event -> {\n            if (addToDisplay) {\n                if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                    inputScreen.setText(\"9\");\n                } else {\n                    inputScreen.setText(inputScreen.getText() + \"9\");\n                }\n            } else {\n                inputScreen.setText(\"9\");\n                addToDisplay = true;\n            }\n            go = true;\n        });\n        btnMul = createButton(\"*\", columns[3], rows[2]);\n        btnMul.addActionListener(event -> {\n            if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n                return;\n            if (go) {\n                typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n                if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                    inputScreen.setText(String.valueOf((int) typedValue));\n                } else {\n                    inputScreen.setText(String.valueOf(typedValue));\n                }\n                selectedOperator = '*';\n                go = false;\n                addToDisplay = false;\n            } else {\n                selectedOperator = '*';\n            }\n        });\n        btn4 = createButton(\"4\", columns[0], rows[3]);\n        btn4.addActionListener(event -> {\n            if (addToDisplay) {\n                if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                    inputScreen.setText(\"4\");\n                } else {\n                    inputScreen.setText(inputScreen.getText() + \"4\");\n                }\n            } else {\n                inputScreen.setText(\"4\");\n                addToDisplay = true;\n            }\n            go = true;\n        });\n        btn5 = createButton(\"5\", columns[1], rows[3]);\n        btn5.addActionListener(event -> {\n            if (addToDisplay) {\n                if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                    inputScreen.setText(\"5\");\n                } else {\n                    inputScreen.setText(inputScreen.getText() + \"5\");\n                }\n            } else {\n                inputScreen.setText(\"5\");\n                addToDisplay = true;\n            }\n            go = true;\n        });\n        btn6 = createButton(\"6\", columns[2], rows[3]);\n        btn6.addActionListener(event -> {\n            if (addToDisplay) {\n                if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                    inputScreen.setText(\"6\");\n                } else {\n                    inputScreen.setText(inputScreen.getText() + \"6\");\n                }\n            } else {\n                inputScreen.setText(\"6\");\n                addToDisplay = true;\n            }\n            go = true;\n        });\n        btnSub = createButton(\"-\", columns[3], rows[3]);\n        btnSub.addActionListener(event -> {\n            if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n                return;\n            if (go) {\n                typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n                if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                    inputScreen.setText(String.valueOf((int) typedValue));\n                } else {\n                    inputScreen.setText(String.valueOf(typedValue));\n                }\n                selectedOperator = '-';\n                go = false;\n                addToDisplay = false;\n            } else {\n                selectedOperator = '-';\n            }\n        });\n        btn1 = createButton(\"1\", columns[0], rows[4]);\n        btn1.addActionListener(event -> {\n            if (addToDisplay) {\n                if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                    inputScreen.setText(\"1\");\n                } else {\n                    inputScreen.setText(inputScreen.getText() + \"1\");\n                }\n            } else {\n                inputScreen.setText(\"1\");\n                addToDisplay = true;\n            }\n            go = true;\n        });\n        btn2 = createButton(\"2\", columns[1], rows[4]);\n        btn2.addActionListener(event -> {\n            if (addToDisplay) {\n                if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                    inputScreen.setText(\"2\");\n                } else {\n                    inputScreen.setText(inputScreen.getText() + \"2\");\n                }\n            } else {\n                inputScreen.setText(\"2\");\n                addToDisplay = true;\n            }\n            go = true;\n        });\n        btn3 = createButton(\"3\", columns[2], rows[4]);\n        btn3.addActionListener(event -> {\n            if (addToDisplay) {\n                if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                    inputScreen.setText(\"3\");\n                } else {\n                    inputScreen.setText(inputScreen.getText() + \"3\");\n                }\n            } else {\n                inputScreen.setText(\"3\");\n                addToDisplay = true;\n            }\n            go = true;\n        });\n        btnAdd = createButton(\"+\", columns[3], rows[4]);\n        btnAdd.addActionListener(event -> {\n            if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n                return;\n            if (go) {\n                typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n                if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                    inputScreen.setText(String.valueOf((int) typedValue));\n                } else {\n                    inputScreen.setText(String.valueOf(typedValue));\n                }\n                selectedOperator = '+';\n                go = false;\n                addToDisplay = false;\n            } else {\n                selectedOperator = '+';\n            }\n        });\n        btnPoint = createButton(\".\", columns[0], rows[5]);\n        btnPoint.addActionListener(event -> {\n            if (addToDisplay) {\n                if (!inputScreen.getText().contains(\".\")) {\n                    inputScreen.setText(inputScreen.getText() + \".\");\n                }\n            } else {\n                inputScreen.setText(\"0.\");\n                addToDisplay = true;\n            }\n            go = true;\n        });\n        btn0 = createButton(\"0\", columns[1], rows[5]);\n        btn0.addActionListener(event -> {\n            if (addToDisplay) {\n                if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                    inputScreen.setText(\"0\");\n                } else {\n                    inputScreen.setText(inputScreen.getText() + \"0\");\n                }\n            } else {\n                inputScreen.setText(\"0\");\n                addToDisplay = true;\n            }\n            go = true;\n        });\n        btnEqual = createButton(\"=\", columns[2], rows[5]);\n        btnEqual.addActionListener(event -> {\n            if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n                return;\n            if (go) {\n                typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n                if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                    inputScreen.setText(String.valueOf((int) typedValue));\n                } else {\n                    inputScreen.setText(String.valueOf(typedValue));\n                }\n                selectedOperator = '=';\n                addToDisplay = false;\n            }\n        });\n        btnEqual.setSize(2 * BUTTON_WIDTH + 10, BUTTON_HEIGHT);\n        btnRoot = createButton(\"√\", columns[4], rows[1]);\n        btnRoot.addActionListener(event -> {\n            if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n                return;\n            if (go) {\n                typedValue = Math.sqrt(Double.parseDouble(inputScreen.getText()));\n                if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                    inputScreen.setText(String.valueOf((int) typedValue));\n                } else {\n                    inputScreen.setText(String.valueOf(typedValue));\n                }\n                selectedOperator = 'a';\n                addToDisplay = false;\n            }\n        });\n        btnRoot.setVisible(false);\n        btnPower = createButton(\"pow\", columns[4], rows[2]);\n        btnPower.addActionListener(event -> {\n            if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n                return;\n            if (go) {\n                typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n                if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                    inputScreen.setText(String.valueOf((int) typedValue));\n                } else {\n                    inputScreen.setText(String.valueOf(typedValue));\n                }\n                selectedOperator = '^';\n                go = false;\n                addToDisplay = false;\n            } else {\n                selectedOperator = '^';\n            }\n        });\n        btnPower.setFont(new Font(\"Comic Sans MS\", Font.PLAIN, 24));\n        btnPower.setVisible(false);\n        btnLog = createButton(\"ln\", columns[4], rows[3]);\n        btnLog.addActionListener(event -> {\n            if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n                return;\n            if (go) {\n                typedValue = Math.log(Double.parseDouble(inputScreen.getText()));\n                if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                    inputScreen.setText(String.valueOf((int) typedValue));\n                } else {\n                    inputScreen.setText(String.valueOf(typedValue));\n                }\n                selectedOperator = 'l';\n                addToDisplay = false;\n            }\n        });\n        btnLog.setVisible(false);\n    }\n\n    private JComboBox<String> createComboBox(String[] items, int x, int y, String toolTip) {\n        JComboBox<String> combo = new JComboBox<>(items);\n        combo.setBounds(x, y, 140, 25);\n        combo.setToolTipText(toolTip);\n        combo.setCursor(new Cursor(Cursor.HAND_CURSOR));\n        window.add(combo);\n        return combo;\n    }\n\n    private JButton createButton(String label, int x, int y) {\n        JButton btn = new JButton(label);\n        btn.setBounds(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);\n        btn.setFont(new Font(\"Comic Sans MS\", Font.PLAIN, 28));\n        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));\n        btn.setFocusable(false);\n        window.add(btn);\n        return btn;\n    }\n\n    private void applyTheme(Theme theme) {\n        window.getContentPane().setBackground(hex2Color(theme.getApplicationBackground()));\n        comboCalculatorType.setForeground(hex2Color(theme.getTextColor()));\n        comboTheme.setForeground(hex2Color(theme.getTextColor()));\n        inputScreen.setForeground(hex2Color(theme.getTextColor()));\n        btn0.setForeground(hex2Color(theme.getTextColor()));\n        btn1.setForeground(hex2Color(theme.getTextColor()));\n        btn2.setForeground(hex2Color(theme.getTextColor()));\n        btn3.setForeground(hex2Color(theme.getTextColor()));\n        btn4.setForeground(hex2Color(theme.getTextColor()));\n        btn5.setForeground(hex2Color(theme.getTextColor()));\n        btn6.setForeground(hex2Color(theme.getTextColor()));\n        btn7.setForeground(hex2Color(theme.getTextColor()));\n        btn8.setForeground(hex2Color(theme.getTextColor()));\n        btn9.setForeground(hex2Color(theme.getTextColor()));\n        btnPoint.setForeground(hex2Color(theme.getTextColor()));\n        btnC.setForeground(hex2Color(theme.getTextColor()));\n        btnBack.setForeground(hex2Color(theme.getTextColor()));\n        btnMod.setForeground(hex2Color(theme.getTextColor()));\n        btnDiv.setForeground(hex2Color(theme.getTextColor()));\n        btnMul.setForeground(hex2Color(theme.getTextColor()));\n        btnSub.setForeground(hex2Color(theme.getTextColor()));\n        btnAdd.setForeground(hex2Color(theme.getTextColor()));\n        btnRoot.setForeground(hex2Color(theme.getTextColor()));\n        btnLog.setForeground(hex2Color(theme.getTextColor()));\n        btnPower.setForeground(hex2Color(theme.getTextColor()));\n        btnEqual.setForeground(hex2Color(theme.getBtnEqualTextColor()));\n        comboCalculatorType.setBackground(hex2Color(theme.getApplicationBackground()));\n        comboTheme.setBackground(hex2Color(theme.getApplicationBackground()));\n        inputScreen.setBackground(hex2Color(theme.getApplicationBackground()));\n        btn0.setBackground(hex2Color(theme.getNumbersBackground()));\n        btn1.setBackground(hex2Color(theme.getNumbersBackground()));\n        btn2.setBackground(hex2Color(theme.getNumbersBackground()));\n        btn3.setBackground(hex2Color(theme.getNumbersBackground()));\n        btn4.setBackground(hex2Color(theme.getNumbersBackground()));\n        btn5.setBackground(hex2Color(theme.getNumbersBackground()));\n        btn6.setBackground(hex2Color(theme.getNumbersBackground()));\n        btn7.setBackground(hex2Color(theme.getNumbersBackground()));\n        btn8.setBackground(hex2Color(theme.getNumbersBackground()));\n        btn9.setBackground(hex2Color(theme.getNumbersBackground()));\n        btnPoint.setBackground(hex2Color(theme.getNumbersBackground()));\n        btnC.setBackground(hex2Color(theme.getOperatorBackground()));\n        btnBack.setBackground(hex2Color(theme.getOperatorBackground()));\n        btnMod.setBackground(hex2Color(theme.getOperatorBackground()));\n        btnDiv.setBackground(hex2Color(theme.getOperatorBackground()));\n        btnMul.setBackground(hex2Color(theme.getOperatorBackground()));\n        btnSub.setBackground(hex2Color(theme.getOperatorBackground()));\n        btnAdd.setBackground(hex2Color(theme.getOperatorBackground()));\n        btnRoot.setBackground(hex2Color(theme.getOperatorBackground()));\n        btnLog.setBackground(hex2Color(theme.getOperatorBackground()));\n        btnPower.setBackground(hex2Color(theme.getOperatorBackground()));\n        btnEqual.setBackground(hex2Color(theme.getBtnEqualBackground()));\n    }\n}",
+                "functions": [
+                    {
+                        "endLine": 101,
+                        "code": "public double calculate(double firstNumber, double secondNumber, char operator) {\n    switch(operator) {\n        case '+':\n            return firstNumber + secondNumber;\n        case '-':\n            return firstNumber - secondNumber;\n        case '*':\n            return firstNumber * secondNumber;\n        case '/':\n            return firstNumber / secondNumber;\n        case '%':\n            return firstNumber % secondNumber;\n        case '^':\n            return Math.pow(firstNumber, secondNumber);\n        default:\n            return secondNumber;\n    }\n}",
+                        "signature": "calculate(double, double, char)",
+                        "startLine": 84,
+                        "Name": "calculate"
+                    },
+                    {
+                        "endLine": 116,
+                        "code": "private void initThemeSelector() {\n    comboTheme = createComboBox(themesMap.keySet().toArray(new String[0]), 230, 30, \"Theme\");\n    comboTheme.addItemListener(event -> {\n        if (event.getStateChange() != ItemEvent.SELECTED)\n            return;\n        String selectedTheme = (String) event.getItem();\n        applyTheme(themesMap.get(selectedTheme));\n    });\n    if (themesMap.entrySet().iterator().hasNext()) {\n        applyTheme(themesMap.entrySet().iterator().next().getValue());\n    }\n}",
+                        "signature": "initThemeSelector()",
+                        "startLine": 103,
+                        "Name": "initThemeSelector"
+                    },
+                    {
+                        "endLine": 125,
+                        "code": "private void initInputScreen(int[] columns, int[] rows) {\n    inputScreen = new JTextField(\"0\");\n    inputScreen.setBounds(columns[0], rows[0], 350, 70);\n    inputScreen.setEditable(false);\n    inputScreen.setBackground(Color.WHITE);\n    inputScreen.setFont(new Font(FONT_NAME, Font.PLAIN, 33));\n    window.add(inputScreen);\n}",
+                        "signature": "initInputScreen(int[], int[])",
+                        "startLine": 118,
+                        "Name": "initInputScreen"
+                    },
+                    {
+                        "endLine": 149,
+                        "code": "private void initCalculatorTypeSelector() {\n    comboCalculatorType = createComboBox(new String[] { \"Standard\", \"Scientific\" }, 20, 30, \"Calculator type\");\n    comboCalculatorType.addItemListener(event -> {\n        if (event.getStateChange() != ItemEvent.SELECTED)\n            return;\n        String selectedItem = (String) event.getItem();\n        switch(selectedItem) {\n            case \"Standard\":\n                window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);\n                btnRoot.setVisible(false);\n                btnPower.setVisible(false);\n                btnLog.setVisible(false);\n                break;\n            case \"Scientific\":\n                window.setSize(WINDOW_WIDTH + 80, WINDOW_HEIGHT);\n                btnRoot.setVisible(true);\n                btnPower.setVisible(true);\n                btnLog.setVisible(true);\n                break;\n        }\n    });\n}",
+                        "signature": "initCalculatorTypeSelector()",
+                        "startLine": 127,
+                        "Name": "initCalculatorTypeSelector"
+                    },
+                    {
+                        "endLine": 508,
+                        "code": "private void initButtons(int[] columns, int[] rows) {\n    btnC = createButton(\"C\", columns[0], rows[1]);\n    btnC.addActionListener(event -> {\n        inputScreen.setText(\"0\");\n        selectedOperator = ' ';\n        typedValue = 0;\n    });\n    btnBack = createButton(\"<-\", columns[1], rows[1]);\n    btnBack.addActionListener(event -> {\n        String str = inputScreen.getText();\n        StringBuilder str2 = new StringBuilder();\n        for (int i = 0; i < (str.length() - 1); i++) {\n            str2.append(str.charAt(i));\n        }\n        if (str2.toString().equals(\"\")) {\n            inputScreen.setText(\"0\");\n        } else {\n            inputScreen.setText(str2.toString());\n        }\n    });\n    btnMod = createButton(\"%\", columns[2], rows[1]);\n    btnMod.addActionListener(event -> {\n        if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()) || !go)\n            return;\n        typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n        if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n            inputScreen.setText(String.valueOf((int) typedValue));\n        } else {\n            inputScreen.setText(String.valueOf(typedValue));\n        }\n        selectedOperator = '%';\n        go = false;\n        addToDisplay = false;\n    });\n    btnDiv = createButton(\"/\", columns[3], rows[1]);\n    btnDiv.addActionListener(event -> {\n        if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n            return;\n        if (go) {\n            typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n            if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                inputScreen.setText(String.valueOf((int) typedValue));\n            } else {\n                inputScreen.setText(String.valueOf(typedValue));\n            }\n            selectedOperator = '/';\n            go = false;\n            addToDisplay = false;\n        } else {\n            selectedOperator = '/';\n        }\n    });\n    btn7 = createButton(\"7\", columns[0], rows[2]);\n    btn7.addActionListener(event -> {\n        if (addToDisplay) {\n            if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                inputScreen.setText(\"7\");\n            } else {\n                inputScreen.setText(inputScreen.getText() + \"7\");\n            }\n        } else {\n            inputScreen.setText(\"7\");\n            addToDisplay = true;\n        }\n        go = true;\n    });\n    btn8 = createButton(\"8\", columns[1], rows[2]);\n    btn8.addActionListener(event -> {\n        if (addToDisplay) {\n            if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                inputScreen.setText(\"8\");\n            } else {\n                inputScreen.setText(inputScreen.getText() + \"8\");\n            }\n        } else {\n            inputScreen.setText(\"8\");\n            addToDisplay = true;\n        }\n        go = true;\n    });\n    btn9 = createButton(\"9\", columns[2], rows[2]);\n    btn9.addActionListener(event -> {\n        if (addToDisplay) {\n            if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                inputScreen.setText(\"9\");\n            } else {\n                inputScreen.setText(inputScreen.getText() + \"9\");\n            }\n        } else {\n            inputScreen.setText(\"9\");\n            addToDisplay = true;\n        }\n        go = true;\n    });\n    btnMul = createButton(\"*\", columns[3], rows[2]);\n    btnMul.addActionListener(event -> {\n        if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n            return;\n        if (go) {\n            typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n            if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                inputScreen.setText(String.valueOf((int) typedValue));\n            } else {\n                inputScreen.setText(String.valueOf(typedValue));\n            }\n            selectedOperator = '*';\n            go = false;\n            addToDisplay = false;\n        } else {\n            selectedOperator = '*';\n        }\n    });\n    btn4 = createButton(\"4\", columns[0], rows[3]);\n    btn4.addActionListener(event -> {\n        if (addToDisplay) {\n            if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                inputScreen.setText(\"4\");\n            } else {\n                inputScreen.setText(inputScreen.getText() + \"4\");\n            }\n        } else {\n            inputScreen.setText(\"4\");\n            addToDisplay = true;\n        }\n        go = true;\n    });\n    btn5 = createButton(\"5\", columns[1], rows[3]);\n    btn5.addActionListener(event -> {\n        if (addToDisplay) {\n            if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                inputScreen.setText(\"5\");\n            } else {\n                inputScreen.setText(inputScreen.getText() + \"5\");\n            }\n        } else {\n            inputScreen.setText(\"5\");\n            addToDisplay = true;\n        }\n        go = true;\n    });\n    btn6 = createButton(\"6\", columns[2], rows[3]);\n    btn6.addActionListener(event -> {\n        if (addToDisplay) {\n            if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                inputScreen.setText(\"6\");\n            } else {\n                inputScreen.setText(inputScreen.getText() + \"6\");\n            }\n        } else {\n            inputScreen.setText(\"6\");\n            addToDisplay = true;\n        }\n        go = true;\n    });\n    btnSub = createButton(\"-\", columns[3], rows[3]);\n    btnSub.addActionListener(event -> {\n        if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n            return;\n        if (go) {\n            typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n            if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                inputScreen.setText(String.valueOf((int) typedValue));\n            } else {\n                inputScreen.setText(String.valueOf(typedValue));\n            }\n            selectedOperator = '-';\n            go = false;\n            addToDisplay = false;\n        } else {\n            selectedOperator = '-';\n        }\n    });\n    btn1 = createButton(\"1\", columns[0], rows[4]);\n    btn1.addActionListener(event -> {\n        if (addToDisplay) {\n            if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                inputScreen.setText(\"1\");\n            } else {\n                inputScreen.setText(inputScreen.getText() + \"1\");\n            }\n        } else {\n            inputScreen.setText(\"1\");\n            addToDisplay = true;\n        }\n        go = true;\n    });\n    btn2 = createButton(\"2\", columns[1], rows[4]);\n    btn2.addActionListener(event -> {\n        if (addToDisplay) {\n            if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                inputScreen.setText(\"2\");\n            } else {\n                inputScreen.setText(inputScreen.getText() + \"2\");\n            }\n        } else {\n            inputScreen.setText(\"2\");\n            addToDisplay = true;\n        }\n        go = true;\n    });\n    btn3 = createButton(\"3\", columns[2], rows[4]);\n    btn3.addActionListener(event -> {\n        if (addToDisplay) {\n            if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                inputScreen.setText(\"3\");\n            } else {\n                inputScreen.setText(inputScreen.getText() + \"3\");\n            }\n        } else {\n            inputScreen.setText(\"3\");\n            addToDisplay = true;\n        }\n        go = true;\n    });\n    btnAdd = createButton(\"+\", columns[3], rows[4]);\n    btnAdd.addActionListener(event -> {\n        if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n            return;\n        if (go) {\n            typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n            if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                inputScreen.setText(String.valueOf((int) typedValue));\n            } else {\n                inputScreen.setText(String.valueOf(typedValue));\n            }\n            selectedOperator = '+';\n            go = false;\n            addToDisplay = false;\n        } else {\n            selectedOperator = '+';\n        }\n    });\n    btnPoint = createButton(\".\", columns[0], rows[5]);\n    btnPoint.addActionListener(event -> {\n        if (addToDisplay) {\n            if (!inputScreen.getText().contains(\".\")) {\n                inputScreen.setText(inputScreen.getText() + \".\");\n            }\n        } else {\n            inputScreen.setText(\"0.\");\n            addToDisplay = true;\n        }\n        go = true;\n    });\n    btn0 = createButton(\"0\", columns[1], rows[5]);\n    btn0.addActionListener(event -> {\n        if (addToDisplay) {\n            if (Pattern.matches(\"[0]*\", inputScreen.getText())) {\n                inputScreen.setText(\"0\");\n            } else {\n                inputScreen.setText(inputScreen.getText() + \"0\");\n            }\n        } else {\n            inputScreen.setText(\"0\");\n            addToDisplay = true;\n        }\n        go = true;\n    });\n    btnEqual = createButton(\"=\", columns[2], rows[5]);\n    btnEqual.addActionListener(event -> {\n        if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n            return;\n        if (go) {\n            typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n            if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                inputScreen.setText(String.valueOf((int) typedValue));\n            } else {\n                inputScreen.setText(String.valueOf(typedValue));\n            }\n            selectedOperator = '=';\n            addToDisplay = false;\n        }\n    });\n    btnEqual.setSize(2 * BUTTON_WIDTH + 10, BUTTON_HEIGHT);\n    btnRoot = createButton(\"√\", columns[4], rows[1]);\n    btnRoot.addActionListener(event -> {\n        if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n            return;\n        if (go) {\n            typedValue = Math.sqrt(Double.parseDouble(inputScreen.getText()));\n            if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                inputScreen.setText(String.valueOf((int) typedValue));\n            } else {\n                inputScreen.setText(String.valueOf(typedValue));\n            }\n            selectedOperator = 'a';\n            addToDisplay = false;\n        }\n    });\n    btnRoot.setVisible(false);\n    btnPower = createButton(\"pow\", columns[4], rows[2]);\n    btnPower.addActionListener(event -> {\n        if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n            return;\n        if (go) {\n            typedValue = calculate(typedValue, Double.parseDouble(inputScreen.getText()), selectedOperator);\n            if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                inputScreen.setText(String.valueOf((int) typedValue));\n            } else {\n                inputScreen.setText(String.valueOf(typedValue));\n            }\n            selectedOperator = '^';\n            go = false;\n            addToDisplay = false;\n        } else {\n            selectedOperator = '^';\n        }\n    });\n    btnPower.setFont(new Font(\"Comic Sans MS\", Font.PLAIN, 24));\n    btnPower.setVisible(false);\n    btnLog = createButton(\"ln\", columns[4], rows[3]);\n    btnLog.addActionListener(event -> {\n        if (!Pattern.matches(DOUBLE_OR_NUMBER_REGEX, inputScreen.getText()))\n            return;\n        if (go) {\n            typedValue = Math.log(Double.parseDouble(inputScreen.getText()));\n            if (Pattern.matches(\"[-]?[\\\\d]+[.][0]*\", String.valueOf(typedValue))) {\n                inputScreen.setText(String.valueOf((int) typedValue));\n            } else {\n                inputScreen.setText(String.valueOf(typedValue));\n            }\n            selectedOperator = 'l';\n            addToDisplay = false;\n        }\n    });\n    btnLog.setVisible(false);\n}",
+                        "signature": "initButtons(int[], int[])",
+                        "startLine": 151,
+                        "Name": "initButtons"
+                    },
+                    {
+                        "endLine": 518,
+                        "code": "private JComboBox<String> createComboBox(String[] items, int x, int y, String toolTip) {\n    JComboBox<String> combo = new JComboBox<>(items);\n    combo.setBounds(x, y, 140, 25);\n    combo.setToolTipText(toolTip);\n    combo.setCursor(new Cursor(Cursor.HAND_CURSOR));\n    window.add(combo);\n    return combo;\n}",
+                        "signature": "createComboBox(String[], int, int, String)",
+                        "startLine": 510,
+                        "Name": "createComboBox"
+                    },
+                    {
+                        "endLine": 529,
+                        "code": "private JButton createButton(String label, int x, int y) {\n    JButton btn = new JButton(label);\n    btn.setBounds(x, y, BUTTON_WIDTH, BUTTON_HEIGHT);\n    btn.setFont(new Font(\"Comic Sans MS\", Font.PLAIN, 28));\n    btn.setCursor(new Cursor(Cursor.HAND_CURSOR));\n    btn.setFocusable(false);\n    window.add(btn);\n    return btn;\n}",
+                        "signature": "createButton(String, int, int)",
+                        "startLine": 520,
+                        "Name": "createButton"
+                    },
+                    {
+                        "endLine": 585,
+                        "code": "private void applyTheme(Theme theme) {\n    window.getContentPane().setBackground(hex2Color(theme.getApplicationBackground()));\n    comboCalculatorType.setForeground(hex2Color(theme.getTextColor()));\n    comboTheme.setForeground(hex2Color(theme.getTextColor()));\n    inputScreen.setForeground(hex2Color(theme.getTextColor()));\n    btn0.setForeground(hex2Color(theme.getTextColor()));\n    btn1.setForeground(hex2Color(theme.getTextColor()));\n    btn2.setForeground(hex2Color(theme.getTextColor()));\n    btn3.setForeground(hex2Color(theme.getTextColor()));\n    btn4.setForeground(hex2Color(theme.getTextColor()));\n    btn5.setForeground(hex2Color(theme.getTextColor()));\n    btn6.setForeground(hex2Color(theme.getTextColor()));\n    btn7.setForeground(hex2Color(theme.getTextColor()));\n    btn8.setForeground(hex2Color(theme.getTextColor()));\n    btn9.setForeground(hex2Color(theme.getTextColor()));\n    btnPoint.setForeground(hex2Color(theme.getTextColor()));\n    btnC.setForeground(hex2Color(theme.getTextColor()));\n    btnBack.setForeground(hex2Color(theme.getTextColor()));\n    btnMod.setForeground(hex2Color(theme.getTextColor()));\n    btnDiv.setForeground(hex2Color(theme.getTextColor()));\n    btnMul.setForeground(hex2Color(theme.getTextColor()));\n    btnSub.setForeground(hex2Color(theme.getTextColor()));\n    btnAdd.setForeground(hex2Color(theme.getTextColor()));\n    btnRoot.setForeground(hex2Color(theme.getTextColor()));\n    btnLog.setForeground(hex2Color(theme.getTextColor()));\n    btnPower.setForeground(hex2Color(theme.getTextColor()));\n    btnEqual.setForeground(hex2Color(theme.getBtnEqualTextColor()));\n    comboCalculatorType.setBackground(hex2Color(theme.getApplicationBackground()));\n    comboTheme.setBackground(hex2Color(theme.getApplicationBackground()));\n    inputScreen.setBackground(hex2Color(theme.getApplicationBackground()));\n    btn0.setBackground(hex2Color(theme.getNumbersBackground()));\n    btn1.setBackground(hex2Color(theme.getNumbersBackground()));\n    btn2.setBackground(hex2Color(theme.getNumbersBackground()));\n    btn3.setBackground(hex2Color(theme.getNumbersBackground()));\n    btn4.setBackground(hex2Color(theme.getNumbersBackground()));\n    btn5.setBackground(hex2Color(theme.getNumbersBackground()));\n    btn6.setBackground(hex2Color(theme.getNumbersBackground()));\n    btn7.setBackground(hex2Color(theme.getNumbersBackground()));\n    btn8.setBackground(hex2Color(theme.getNumbersBackground()));\n    btn9.setBackground(hex2Color(theme.getNumbersBackground()));\n    btnPoint.setBackground(hex2Color(theme.getNumbersBackground()));\n    btnC.setBackground(hex2Color(theme.getOperatorBackground()));\n    btnBack.setBackground(hex2Color(theme.getOperatorBackground()));\n    btnMod.setBackground(hex2Color(theme.getOperatorBackground()));\n    btnDiv.setBackground(hex2Color(theme.getOperatorBackground()));\n    btnMul.setBackground(hex2Color(theme.getOperatorBackground()));\n    btnSub.setBackground(hex2Color(theme.getOperatorBackground()));\n    btnAdd.setBackground(hex2Color(theme.getOperatorBackground()));\n    btnRoot.setBackground(hex2Color(theme.getOperatorBackground()));\n    btnLog.setBackground(hex2Color(theme.getOperatorBackground()));\n    btnPower.setBackground(hex2Color(theme.getOperatorBackground()));\n    btnEqual.setBackground(hex2Color(theme.getBtnEqualBackground()));\n}",
+                        "signature": "applyTheme(Theme)",
+                        "startLine": 531,
+                        "Name": "applyTheme"
+                    }
+                ],
+                "startLine": 16,
+                "name": "CalculatorUI",
+                "type": "class",
+                "properties": [
+                    "private static final String FONT_NAME = \"Comic Sans MS\";",
+                    "private static final String DOUBLE_OR_NUMBER_REGEX = \"([-]?\\\\d+[.]\\\\d*)|(\\\\d+)|(-\\\\d+)\";",
+                    "private static final String APPLICATION_TITLE = \"Calculator\";",
+                    "private static final int WINDOW_WIDTH = 410;",
+                    "private static final int WINDOW_HEIGHT = 600;",
+                    "private static final int BUTTON_WIDTH = 80;",
+                    "private static final int BUTTON_HEIGHT = 70;",
+                    "private static final int MARGIN_X = 20;",
+                    "private static final int MARGIN_Y = 60;",
+                    "private final JFrame window;",
+                    "private JComboBox<String> comboCalculatorType;",
+                    "private JComboBox<String> comboTheme;",
+                    "private JTextField inputScreen;",
+                    "private JButton btnC;",
+                    "private JButton btnBack;",
+                    "private JButton btnMod;",
+                    "private JButton btnDiv;",
+                    "private JButton btnMul;",
+                    "private JButton btnSub;",
+                    "private JButton btnAdd;",
+                    "private JButton btn0;",
+                    "private JButton btn1;",
+                    "private JButton btn2;",
+                    "private JButton btn3;",
+                    "private JButton btn4;",
+                    "private JButton btn5;",
+                    "private JButton btn6;",
+                    "private JButton btn7;",
+                    "private JButton btn8;",
+                    "private JButton btn9;",
+                    "private JButton btnPoint;",
+                    "private JButton btnEqual;",
+                    "private JButton btnRoot;",
+                    "private JButton btnPower;",
+                    "private JButton btnLog;",
+                    "private char selectedOperator = ' ';",
+                    "// For calculate with Opt != (=)\nprivate boolean go = true;",
+                    "// Connect numbers in display\nprivate boolean addToDisplay = true;",
+                    "private double typedValue = 0;",
+                    "private final Map<String, Theme> themesMap;"
+                ],
+                "innerClasses": []
+            }],
+            "statements": [],
+            "funcs": []
+        },
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/theme/ThemeLoader.java": {
+            "classes": [{
+                "endLine": 29,
+                "constructors": [{
+                    "endLine": 17,
+                    "code": "private ThemeLoader() {\n    throw new AssertionError(\"Constructor is not allowed\");\n}",
+                    "signature": "ThemeLoader()",
+                    "startLine": 15,
+                    "Name": "ThemeLoader"
+                }],
+                "parentClasses": [],
+                "code": "public class ThemeLoader {\n\n    private ThemeLoader() {\n        throw new AssertionError(\"Constructor is not allowed\");\n    }\n\n    public static Map<String, Theme> loadThemes() {\n        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());\n        mapper.findAndRegisterModules();\n        try {\n            ThemeList themeList = mapper.readValue(new File(\"src/main/resources/application.yaml\"), ThemeList.class);\n            return themeList.getThemesAsMap();\n        } catch (IOException e) {\n            return Collections.emptyMap();\n        }\n    }\n}",
+                "functions": [{
+                    "endLine": 28,
+                    "code": "public static Map<String, Theme> loadThemes() {\n    ObjectMapper mapper = new ObjectMapper(new YAMLFactory());\n    mapper.findAndRegisterModules();\n    try {\n        ThemeList themeList = mapper.readValue(new File(\"src/main/resources/application.yaml\"), ThemeList.class);\n        return themeList.getThemesAsMap();\n    } catch (IOException e) {\n        return Collections.emptyMap();\n    }\n}",
+                    "signature": "loadThemes()",
+                    "startLine": 19,
+                    "Name": "loadThemes"
+                }],
+                "startLine": 13,
+                "name": "ThemeLoader",
+                "type": "class",
+                "properties": [],
+                "innerClasses": []
+            }],
+            "statements": [],
+            "funcs": []
+        },
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/theme/properties/Theme.java": {
+            "classes": [{
+                "endLine": 68,
+                "constructors": [],
+                "parentClasses": [],
+                "code": "public class Theme {\n\n    private String name;\n\n    private String applicationBackground;\n\n    private String textColor;\n\n    private String btnEqualTextColor;\n\n    private String operatorBackground;\n\n    private String numbersBackground;\n\n    private String btnEqualBackground;\n\n    public String getName() {\n        return name;\n    }\n\n    public void setName(String name) {\n        this.name = name;\n    }\n\n    public String getApplicationBackground() {\n        return applicationBackground;\n    }\n\n    public void setApplicationBackground(String applicationBackground) {\n        this.applicationBackground = applicationBackground;\n    }\n\n    public String getTextColor() {\n        return textColor;\n    }\n\n    public void setTextColor(String textColor) {\n        this.textColor = textColor;\n    }\n\n    public String getBtnEqualTextColor() {\n        return btnEqualTextColor;\n    }\n\n    public void setBtnEqualTextColor(String btnEqualTextColor) {\n        this.btnEqualTextColor = btnEqualTextColor;\n    }\n\n    public String getOperatorBackground() {\n        return operatorBackground;\n    }\n\n    public void setOperatorBackground(String operatorBackground) {\n        this.operatorBackground = operatorBackground;\n    }\n\n    public String getNumbersBackground() {\n        return numbersBackground;\n    }\n\n    public void setNumbersBackground(String numbersBackground) {\n        this.numbersBackground = numbersBackground;\n    }\n\n    public String getBtnEqualBackground() {\n        return btnEqualBackground;\n    }\n\n    public void setBtnEqualBackground(String btnEqualBackground) {\n        this.btnEqualBackground = btnEqualBackground;\n    }\n}",
+                "functions": [
+                    {
+                        "endLine": 15,
+                        "code": "public String getName() {\n    return name;\n}",
+                        "signature": "getName()",
+                        "startLine": 13,
+                        "Name": "getName"
+                    },
+                    {
+                        "endLine": 19,
+                        "code": "public void setName(String name) {\n    this.name = name;\n}",
+                        "signature": "setName(String)",
+                        "startLine": 17,
+                        "Name": "setName"
+                    },
+                    {
+                        "endLine": 23,
+                        "code": "public String getApplicationBackground() {\n    return applicationBackground;\n}",
+                        "signature": "getApplicationBackground()",
+                        "startLine": 21,
+                        "Name": "getApplicationBackground"
+                    },
+                    {
+                        "endLine": 27,
+                        "code": "public void setApplicationBackground(String applicationBackground) {\n    this.applicationBackground = applicationBackground;\n}",
+                        "signature": "setApplicationBackground(String)",
+                        "startLine": 25,
+                        "Name": "setApplicationBackground"
+                    },
+                    {
+                        "endLine": 31,
+                        "code": "public String getTextColor() {\n    return textColor;\n}",
+                        "signature": "getTextColor()",
+                        "startLine": 29,
+                        "Name": "getTextColor"
+                    },
+                    {
+                        "endLine": 35,
+                        "code": "public void setTextColor(String textColor) {\n    this.textColor = textColor;\n}",
+                        "signature": "setTextColor(String)",
+                        "startLine": 33,
+                        "Name": "setTextColor"
+                    },
+                    {
+                        "endLine": 39,
+                        "code": "public String getBtnEqualTextColor() {\n    return btnEqualTextColor;\n}",
+                        "signature": "getBtnEqualTextColor()",
+                        "startLine": 37,
+                        "Name": "getBtnEqualTextColor"
+                    },
+                    {
+                        "endLine": 43,
+                        "code": "public void setBtnEqualTextColor(String btnEqualTextColor) {\n    this.btnEqualTextColor = btnEqualTextColor;\n}",
+                        "signature": "setBtnEqualTextColor(String)",
+                        "startLine": 41,
+                        "Name": "setBtnEqualTextColor"
+                    },
+                    {
+                        "endLine": 47,
+                        "code": "public String getOperatorBackground() {\n    return operatorBackground;\n}",
+                        "signature": "getOperatorBackground()",
+                        "startLine": 45,
+                        "Name": "getOperatorBackground"
+                    },
+                    {
+                        "endLine": 51,
+                        "code": "public void setOperatorBackground(String operatorBackground) {\n    this.operatorBackground = operatorBackground;\n}",
+                        "signature": "setOperatorBackground(String)",
+                        "startLine": 49,
+                        "Name": "setOperatorBackground"
+                    },
+                    {
+                        "endLine": 55,
+                        "code": "public String getNumbersBackground() {\n    return numbersBackground;\n}",
+                        "signature": "getNumbersBackground()",
+                        "startLine": 53,
+                        "Name": "getNumbersBackground"
+                    },
+                    {
+                        "endLine": 59,
+                        "code": "public void setNumbersBackground(String numbersBackground) {\n    this.numbersBackground = numbersBackground;\n}",
+                        "signature": "setNumbersBackground(String)",
+                        "startLine": 57,
+                        "Name": "setNumbersBackground"
+                    },
+                    {
+                        "endLine": 63,
+                        "code": "public String getBtnEqualBackground() {\n    return btnEqualBackground;\n}",
+                        "signature": "getBtnEqualBackground()",
+                        "startLine": 61,
+                        "Name": "getBtnEqualBackground"
+                    },
+                    {
+                        "endLine": 67,
+                        "code": "public void setBtnEqualBackground(String btnEqualBackground) {\n    this.btnEqualBackground = btnEqualBackground;\n}",
+                        "signature": "setBtnEqualBackground(String)",
+                        "startLine": 65,
+                        "Name": "setBtnEqualBackground"
+                    }
+                ],
+                "startLine": 3,
+                "name": "Theme",
+                "type": "class",
+                "properties": [
+                    "private String name;",
+                    "private String applicationBackground;",
+                    "private String textColor;",
+                    "private String btnEqualTextColor;",
+                    "private String operatorBackground;",
+                    "private String numbersBackground;",
+                    "private String btnEqualBackground;"
+                ],
+                "innerClasses": []
+            }],
+            "statements": [],
+            "funcs": []
+        },
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/test/Theme.java": {
+            "classes": [{
+                "endLine": 68,
+                "constructors": [],
+                "parentClasses": [],
+                "code": "public class Theme {\n\n    private String name;\n\n    private String applicationBackground;\n\n    private String textColor;\n\n    private String btnEqualTextColor;\n\n    private String operatorBackground;\n\n    private String numbersBackground;\n\n    private String btnEqualBackground;\n\n    public String getName() {\n        return name;\n    }\n\n    public void setName(String name) {\n        this.name = name;\n    }\n\n    public String getApplicationBackground() {\n        return applicationBackground;\n    }\n\n    public void setApplicationBackground(String applicationBackground) {\n        this.applicationBackground = applicationBackground;\n    }\n\n    public String getTextColor() {\n        return textColor;\n    }\n\n    public void setTextColor(String textColor) {\n        this.textColor = textColor;\n    }\n\n    public String getBtnEqualTextColor() {\n        return btnEqualTextColor;\n    }\n\n    public void setBtnEqualTextColor(String btnEqualTextColor) {\n        this.btnEqualTextColor = btnEqualTextColor;\n    }\n\n    public String getOperatorBackground() {\n        return operatorBackground;\n    }\n\n    public void setOperatorBackground(String operatorBackground) {\n        this.operatorBackground = operatorBackground;\n    }\n\n    public String getNumbersBackground() {\n        return numbersBackground;\n    }\n\n    public void setNumbersBackground(String numbersBackground) {\n        this.numbersBackground = numbersBackground;\n    }\n\n    public String getBtnEqualBackground() {\n        return btnEqualBackground;\n    }\n\n    public void setBtnEqualBackground(String btnEqualBackground) {\n        this.btnEqualBackground = btnEqualBackground;\n    }\n}",
+                "functions": [
+                    {
+                        "endLine": 15,
+                        "code": "public String getName() {\n    return name;\n}",
+                        "signature": "getName()",
+                        "startLine": 13,
+                        "Name": "getName"
+                    },
+                    {
+                        "endLine": 19,
+                        "code": "public void setName(String name) {\n    this.name = name;\n}",
+                        "signature": "setName(String)",
+                        "startLine": 17,
+                        "Name": "setName"
+                    },
+                    {
+                        "endLine": 23,
+                        "code": "public String getApplicationBackground() {\n    return applicationBackground;\n}",
+                        "signature": "getApplicationBackground()",
+                        "startLine": 21,
+                        "Name": "getApplicationBackground"
+                    },
+                    {
+                        "endLine": 27,
+                        "code": "public void setApplicationBackground(String applicationBackground) {\n    this.applicationBackground = applicationBackground;\n}",
+                        "signature": "setApplicationBackground(String)",
+                        "startLine": 25,
+                        "Name": "setApplicationBackground"
+                    },
+                    {
+                        "endLine": 31,
+                        "code": "public String getTextColor() {\n    return textColor;\n}",
+                        "signature": "getTextColor()",
+                        "startLine": 29,
+                        "Name": "getTextColor"
+                    },
+                    {
+                        "endLine": 35,
+                        "code": "public void setTextColor(String textColor) {\n    this.textColor = textColor;\n}",
+                        "signature": "setTextColor(String)",
+                        "startLine": 33,
+                        "Name": "setTextColor"
+                    },
+                    {
+                        "endLine": 39,
+                        "code": "public String getBtnEqualTextColor() {\n    return btnEqualTextColor;\n}",
+                        "signature": "getBtnEqualTextColor()",
+                        "startLine": 37,
+                        "Name": "getBtnEqualTextColor"
+                    },
+                    {
+                        "endLine": 43,
+                        "code": "public void setBtnEqualTextColor(String btnEqualTextColor) {\n    this.btnEqualTextColor = btnEqualTextColor;\n}",
+                        "signature": "setBtnEqualTextColor(String)",
+                        "startLine": 41,
+                        "Name": "setBtnEqualTextColor"
+                    },
+                    {
+                        "endLine": 47,
+                        "code": "public String getOperatorBackground() {\n    return operatorBackground;\n}",
+                        "signature": "getOperatorBackground()",
+                        "startLine": 45,
+                        "Name": "getOperatorBackground"
+                    },
+                    {
+                        "endLine": 51,
+                        "code": "public void setOperatorBackground(String operatorBackground) {\n    this.operatorBackground = operatorBackground;\n}",
+                        "signature": "setOperatorBackground(String)",
+                        "startLine": 49,
+                        "Name": "setOperatorBackground"
+                    },
+                    {
+                        "endLine": 55,
+                        "code": "public String getNumbersBackground() {\n    return numbersBackground;\n}",
+                        "signature": "getNumbersBackground()",
+                        "startLine": 53,
+                        "Name": "getNumbersBackground"
+                    },
+                    {
+                        "endLine": 59,
+                        "code": "public void setNumbersBackground(String numbersBackground) {\n    this.numbersBackground = numbersBackground;\n}",
+                        "signature": "setNumbersBackground(String)",
+                        "startLine": 57,
+                        "Name": "setNumbersBackground"
+                    },
+                    {
+                        "endLine": 63,
+                        "code": "public String getBtnEqualBackground() {\n    return btnEqualBackground;\n}",
+                        "signature": "getBtnEqualBackground()",
+                        "startLine": 61,
+                        "Name": "getBtnEqualBackground"
+                    },
+                    {
+                        "endLine": 67,
+                        "code": "public void setBtnEqualBackground(String btnEqualBackground) {\n    this.btnEqualBackground = btnEqualBackground;\n}",
+                        "signature": "setBtnEqualBackground(String)",
+                        "startLine": 65,
+                        "Name": "setBtnEqualBackground"
+                    }
+                ],
+                "startLine": 3,
+                "name": "Theme",
+                "type": "class",
+                "properties": [
+                    "private String name;",
+                    "private String applicationBackground;",
+                    "private String textColor;",
+                    "private String btnEqualTextColor;",
+                    "private String operatorBackground;",
+                    "private String numbersBackground;",
+                    "private String btnEqualBackground;"
+                ],
+                "innerClasses": []
+            }],
+            "statements": [],
+            "funcs": []
+        },
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/util/ColorUtil.java": {
+            "classes": [{
+                "endLine": 20,
+                "constructors": [{
+                    "endLine": 10,
+                    "code": "private ColorUtil() {\n    throw new AssertionError(\"Constructor is not allowed\");\n}",
+                    "signature": "ColorUtil()",
+                    "startLine": 8,
+                    "Name": "ColorUtil"
+                }],
+                "parentClasses": [],
+                "code": "public class ColorUtil {\n\n    private ColorUtil() {\n        throw new AssertionError(\"Constructor is not allowed\");\n    }\n\n    public static Color hex2Color(String colorHex) {\n        return Optional.ofNullable(colorHex).map(hex -> new Color(Integer.valueOf(colorHex.substring(0, 2), 16), Integer.valueOf(colorHex.substring(2, 4), 16), Integer.valueOf(colorHex.substring(4, 6), 16))).orElse(null);\n    }\n}",
+                "functions": [{
+                    "endLine": 19,
+                    "code": "public static Color hex2Color(String colorHex) {\n    return Optional.ofNullable(colorHex).map(hex -> new Color(Integer.valueOf(colorHex.substring(0, 2), 16), Integer.valueOf(colorHex.substring(2, 4), 16), Integer.valueOf(colorHex.substring(4, 6), 16))).orElse(null);\n}",
+                    "signature": "hex2Color(String)",
+                    "startLine": 12,
+                    "Name": "hex2Color"
+                }],
+                "startLine": 6,
+                "name": "ColorUtil",
+                "type": "class",
+                "properties": [],
+                "innerClasses": []
+            }],
+            "statements": [],
+            "funcs": []
+        },
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/theme/properties/ThemeList.java": {
+            "classes": [{
+                "endLine": 22,
+                "constructors": [],
+                "parentClasses": [],
+                "code": "public class ThemeList {\n\n    private List<Theme> themes;\n\n    public List<Theme> getThemes() {\n        return themes;\n    }\n\n    public void setThemes(List<Theme> themes) {\n        this.themes = themes;\n    }\n\n    public Map<String, Theme> getThemesAsMap() {\n        return themes.stream().collect(Collectors.toMap(Theme::getName, Function.identity()));\n    }\n}",
+                "functions": [
+                    {
+                        "endLine": 13,
+                        "code": "public List<Theme> getThemes() {\n    return themes;\n}",
+                        "signature": "getThemes()",
+                        "startLine": 11,
+                        "Name": "getThemes"
+                    },
+                    {
+                        "endLine": 17,
+                        "code": "public void setThemes(List<Theme> themes) {\n    this.themes = themes;\n}",
+                        "signature": "setThemes(List)",
+                        "startLine": 15,
+                        "Name": "setThemes"
+                    },
+                    {
+                        "endLine": 21,
+                        "code": "public Map<String, Theme> getThemesAsMap() {\n    return themes.stream().collect(Collectors.toMap(Theme::getName, Function.identity()));\n}",
+                        "signature": "getThemesAsMap()",
+                        "startLine": 19,
+                        "Name": "getThemesAsMap"
+                    }
+                ],
+                "startLine": 8,
+                "name": "ThemeList",
+                "type": "class",
+                "properties": ["private List<Theme> themes;"],
+                "innerClasses": []
+            }],
+            "statements": [],
+            "funcs": []
+        }
+    },
+    "stats": {
+        "totalClasses": 8,
+        "totalFunctions": 44,
+        "totalStatements": 0
+    },
+    "files": {
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/App.java": "A",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/test/java/com/houarizegai/calculator/CalculatorUITest.java": "A",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/ui/CalculatorUI.java": "A",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/theme/ThemeLoader.java": "A",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/theme/properties/Theme.java": "A",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/test/Theme.java": "A",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/util/ColorUtil.java": "A",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/theme/properties/ThemeList.java": "A"
+    },
+    "dirs": [
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/test",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator",
+        "/Users/ritvikrajvanshi/knowl-project",
+        "/Users/ritvikrajvanshi",
+        "/Users",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/test/java/com/houarizegai/calculator",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/test/java/com/houarizegai",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/test/java/com",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/test/java",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/test",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/ui",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/util",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/theme",
+        "/Users/ritvikrajvanshi/knowl-project/Calculator/src/main/java/com/houarizegai/calculator/theme/properties"
+    ],
+    "failed_files": []
+}

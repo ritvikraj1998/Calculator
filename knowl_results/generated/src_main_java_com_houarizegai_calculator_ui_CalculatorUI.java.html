@@ -1,0 +1,264 @@
+
+<mark data-lexical-mark-id="380">
+  <span><h1>Class name: CalculatorUI</h1>
+<p>Description along with Parent class if any, else None</p>
+<p>This class represents the user interface for a calculator application.</p>
+
+<h2><b>Class properties:</b></h2>
+<p>List of class properties with names in bold, description, data type, if any else None</p>
+<ul>
+<li><b>FONT_NAME:</b> The name of the font used for displaying text on the UI. (String)</li>
+<li><b>DOUBLE_OR_NUMBER_REGEX:</b> A regular expression pattern for validating double or number input. (String)</li>
+<li><b>APPLICATION_TITLE:</b> The title of the calculator application. (String)</li>
+<li><b>WINDOW_WIDTH:</b> The width of the calculator window in pixels. (int)</li>
+<li><b>WINDOW_HEIGHT:</b> The height of the calculator window in pixels. (int)</li>
+<li><b>BUTTON_WIDTH:</b> The width of the calculator buttons in pixels. (int)</li>
+<li><b>BUTTON_HEIGHT:</b> The height of the calculator buttons in pixels. (int)</li>
+<li><b>MARGIN_X:</b> The horizontal margin for positioning UI elements. (int)</li>
+<li><b>MARGIN_Y:</b> The vertical margin for positioning UI elements. (int)</li>
+<li><b>window:</b> The JFrame window for displaying the calculator UI. (JFrame)</li>
+<li><b>comboCalculatorType:</b> The combo box for selecting the type of calculator. (JComboBox<String>)</li>
+<li><b>comboTheme:</b> The combo box for selecting the theme of the calculator UI. (JComboBox<String>)</li>
+<li><b>inputScreen:</b> The text field for displaying and entering numbers and calculations. (JTextField)</li>
+<li><b>btnC:</b> The button for clearing the input screen. (JButton)</li>
+<li><b>btnBack:</b> The button for deleting the last entered character. (JButton)</li>
+<li><b>btnMod:</b> The button for performing the modulo operation. (JButton)</li>
+<li><b>btnDiv:</b> The button for performing the division operation. (JButton)</li>
+<li><b>btnMul:</b> The button for performing the multiplication operation. (JButton)</li>
+<li><b>btnSub:</b> The button for performing the subtraction operation. (JButton)</li>
+<li><b>btnAdd:</b> The button for performing the addition operation. (JButton)</li>
+<li><b>btn0 - btn9:</b> The buttons for entering numbers 0-9. (JButton)</li>
+<li><b>btnPoint:</b> The button for entering a decimal point. (JButton)</li>
+<li><b>btnEqual:</b> The button for calculating the result. (JButton)</li>
+<li><b>btnRoot:</b> The button for performing the square root operation. (JButton)</li>
+<li><b>btnPower:</b> The button for performing the exponentiation operation. (JButton)</li>
+<li><b>btnLog:</b> The button for performing the logarithm operation. (JButton)</li>
+<li><b>selectedOperator:</b> The selected operator for performing mathematical operations. (char)</li>
+<li><b>go:</b> A flag for determining if calculation should be performed with operator other than '='. (boolean)</li>
+<li><b>addToDisplay:</b> A flag for connecting numbers in the display. (boolean)</li>
+<li><b>typedValue:</b> The current value entered by the user. (double)</li>
+<li><b>themesMap:</b> A map containing different themes for the calculator UI. (Map<String, Theme>)</li>
+</ul>
+  
+
+<h2><b>Class Constructor:</b></h2>
+<p>List of class Constructor with names in bold, description, inputs, if any else None</p>
+<p>This class does not have any constructor explicitly defined.</p>
+
+<h2><b>Class static methods:</b></h2>
+<p>List of Class static methods with names in bold, description, inputs and outputs, if any else None</p>
+<p>This class does not have any static methods.</p>
+
+<h2><b>Class instance methods:</b></h2>
+<p>List of Class instance methods with names in bold, description, inputs and outputs, if any else None</p>
+<ul>
+<li><b>calculate(double, double, char):</b> This function performs various mathematical operations based on the input parameters. It takes two double numbers and a character operator as inputs. It returns the result of the operation.</li>
+<li><b>initThemeSelector():</b> This function initializes the theme selector component. It creates a combo box menu with theme options, adds an item listener to handle theme changes, and applies the initial theme.</li>
+<li><b>initInputScreen(int[], int[]):</b> This function initializes the input screen component. It creates a text field with specified dimensions and appearance properties, and adds it to the window.</li>
+<li><b>initCalculatorTypeSelector():</b> This private function initializes the calculator type selector component. It creates a combo box menu with calculator type options, adds an item listener to handle type changes, and updates the UI accordingly.</li>
+<li><b>initButtons(int[], int[]):</b> This function initializes the buttons used in the calculator UI. It creates and configures each button, adds action listeners to handle user interactions, and adds them to the window.</li>
+<li><b>createComboBox(String[], int, int, String):</b> This function creates a combo box with the given items and position. It configures the appearance and behavior of the combo box, and adds it to the window.</li>
+<li><b>createButton(String, int, int):</b> This function creates a button with a given label and position. It configures the appearance and behavior of the button, and adds it to the window.</li>
+<li><b>applyTheme(Theme):</b> This private function applies the selected theme to the calculator UI. It sets the background and foreground colors of various components based on the theme's settings.</li>
+</ul>
+function
+
+<mark data-lexical-mark-id="771">
+  <span><html>
+    <h1>Function name: calculate</h1>
+    <h3><b>Input:</b></h3>
+    <p><b>firstNumber:</b> This is the first number for calculation.</p>
+    <p><b>secondNumber:</b> This is the second number for calculation.</p>
+    <p><b>operator:</b> This is the operator that specifies the operation to be performed. It can be one of the following: + (addition), - (subtraction), * (multiplication), / (division), % (modulus), or ^ (exponentiation).</p>
+    
+    <h3><b>Output:</b></h3>
+    <p><b>result:</b> This is the calculated result of the operation.</p>
+    
+    <h3><b>Description:</b></h3>
+    <p>This function takes in two numbers, firstNumber and secondNumber, along with an operator to perform a calculation. It uses a switch statement to determine the operation based on the operator provided.</p>
+    <p>If the operator is '+', it adds firstNumber and secondNumber.</p>
+    <p>If the operator is '-', it subtracts secondNumber from firstNumber.</p>
+    <p>If the operator is '*', it multiplies firstNumber and secondNumber.</p>
+    <p>If the operator is '/', it divides firstNumber by secondNumber.</p>
+    <p>If the operator is '%', it calculates the modulus of firstNumber divided by secondNumber.</p>
+    <p>If the operator is '^', it calculates the exponentiation of firstNumber to the power of secondNumber using the Math.pow() function.</p>
+    <p>If the operator is none of the above, it returns the value of secondNumber.</p>
+    <p>The calculated result is then returned as the output of the function.</p>
+</html></span>
+</mark>
+<p></p>
+<div data-lexical-github-code-id="98ec15c2-3c3c-4bb1-a9f6-d44c37f64fb3" data-lexical-github-linkedMarkNode-id="771" data-lexical-github-document-id="6774acd5-4ea0-4ca0-82e6-301d9ffc3717"></div>
+<p></p>
+
+
+<mark data-lexical-mark-id="206">
+  <span><html>
+<h1>Function name: initThemeSelector</h1>
+<h3><b>Input:</b></h3>
+<p><b>themesMap:</b> A map object containing theme names as keys and theme values as values.</p>
+<h3><b>Output:</b></h3>
+<p>No output.</p>
+<h3><b>Description:</b></h3>
+<p>This function initializes a theme selector in the user interface. It creates a combo box with theme names as options and sets up an item listener to handle theme selection events.</p>
+<p>First, it creates the combo box by calling the function <b>createComboBox</b> with the keys of <b>themesMap</b> as the options, a width of 230 pixels, a height of 30 pixels, and a label of "Theme".</p>
+<p>Then, it adds an item listener to the combo box using a lambda expression. The lambda expression checks if the event state change is "selected", and if so, it retrieves the selected theme name and calls the function <b>applyTheme</b> with the corresponding theme value from <b>themesMap</b>.</p>
+<p>Next, it checks if there is at least one entry in <b>themesMap</b>. If so, it applies the first theme in the map by calling <b>applyTheme</b> with the value of the first entry.</p>
+</html></span>
+</mark>
+<p></p>
+<div data-lexical-github-code-id="8f43086c-acd0-436a-a69e-722eb070e940" data-lexical-github-linkedMarkNode-id="206" data-lexical-github-document-id="6774acd5-4ea0-4ca0-82e6-301d9ffc3717"></div>
+<p></p>
+
+
+<mark data-lexical-mark-id="65">
+  <span><html>
+    <h1>Function name: initInputScreen</h1>
+    <h3><b>Input:</b></h3>
+    <p><b>columns:</b> An array of integers representing the x-coordinates of the input screen.</p>
+    <p><b>rows:</b> An array of integers representing the y-coordinates of the input screen.</p>
+    
+    <h3><b>Output:</b></h3>
+    <p>No explicit output, but the function modifies the "inputScreen" object.</p>
+    
+    <h3><b>Description:</b></h3>
+    <p>This function initializes the input screen in a graphical user interface (GUI) application. It creates a new JTextField component object, sets its initial value to "0", and positions it on the GUI using the x and y coordinates from the "columns" and "rows" arrays, respectively. The "inputScreen" is then set to be uneditable, with a white background and a font size of 33 pixels. Finally, the "inputScreen" object is added to the GUI window.</p>
+</html></span>
+</mark>
+<p></p>
+<div data-lexical-github-code-id="4c4e7d6d-084f-4915-9829-ea58391d24e1" data-lexical-github-linkedMarkNode-id="65" data-lexical-github-document-id="6774acd5-4ea0-4ca0-82e6-301d9ffc3717"></div>
+<p></p>
+
+
+<mark data-lexical-mark-id="336">
+  <span><html>
+<h1>Function name: initCalculatorTypeSelector</h1>
+<h3><b>Input:</b></h3>
+<p>None</p>
+<h3><b>Output:</b></h3>
+<p>None</p>
+<h3><b>Description:</b></h3>
+<p>This function initializes a selector to choose between different types of calculators, specifically "Standard" and "Scientific". It creates a combo box with the options "Standard" and "Scientific" and adds an item listener to it. When an item is selected in the combo box, the function checks which item is selected and performs different actions based on the selected item.</p>
+</html></span>
+</mark>
+<p></p>
+<div data-lexical-github-code-id="ec31d3ab-c5cf-4af1-86ee-76fde0f4eb03" data-lexical-github-linkedMarkNode-id="336" data-lexical-github-document-id="6774acd5-4ea0-4ca0-82e6-301d9ffc3717"></div>
+<p></p>
+
+
+<mark data-lexical-mark-id="323">
+  <span><html>
+<h1>Function name: initButtons</h1>
+<h3><b>Input:</b></h3>
+<p><b>columns:</b> An array of integers representing the column positions of the buttons.</p>
+<p><b>rows:</b> An array of integers representing the row positions of the buttons.</p>
+
+<h3><b>Output:</b></h3>
+<p>No specific output. The function performs various actions based on user interaction.</p>
+
+<h3><b>Description:</b></h3>
+<p>This function is responsible for initializing and setting up the behavior of several buttons in a user interface. It takes in two arrays, <b>columns</b> and <b>rows</b>, which define the position of the buttons in a grid layout.</p>
+
+<p>The function uses the <code>createButton()</code> method to create each button, and sets up an <code>ActionListener</code> for each button to handle user interactions.</p>
+
+<p>Here are the details of the actions performed by each button:</p>
+
+<ul>
+<li><b>btnC:</b> This button clears the input screen, sets the selected operator to empty, and resets the typed value to zero.</li>
+<li><b>btnBack:</b> This button deletes the last character from the input screen. If the screen is empty, it sets it to zero.</li>
+<li><b>btnMod:</b> This button performs a modulus operation on the typed value and the value on the input screen, updates the input screen with the result, sets the selected operator to '%', and modifies some variables for further calculations.</li>
+<li><b>btnDiv:</b> This button performs a division operation on the typed value and the value on the input screen, updates the input screen with the result, sets the selected operator to '/', and modifies some variables for further calculations.</li>
+<li><b>btn7, btn8, btn9:</b> These buttons add the corresponding numbers (7, 8, 9) to the input screen. If the addToDisplay flag is false, it sets the input screen to the corresponding number. It also sets go flag to true.</li>
+<li><b>btnMul:</b> This button performs a multiplication operation on the typed value and the value on the input screen, updates the input screen with the result, sets the selected operator to '*', and modifies some variables for further calculations.</li>
+<li><b>btn4, btn5, btn6:</b> These buttons add the corresponding numbers (4, 5, 6) to the input screen. If the addToDisplay flag is false, it sets the input screen to the corresponding number. It also sets go flag to true.</li>
+<li><b>btnSub:</b> This button performs a subtraction operation on the typed value and the value on the input screen, updates the input screen with the result, sets the selected operator to '-', and modifies some variables for further calculations.</li>
+<li><b>btn1, btn2, btn3:</b> These buttons add the corresponding numbers (1, 2, 3) to the input screen. If the addToDisplay flag is false, it sets the input screen to the corresponding number. It also sets go flag to true.</li>
+<li><b>btnAdd:</b> This button performs an addition operation on the typed value and the value on the input screen, updates the input screen with the result, sets the selected operator to '+', and modifies some variables for further calculations.</li>
+<li><b>btnPoint:</b> This button adds a decimal point to the input screen. It only adds the decimal point if there isn't already one. It also sets go flag to true.</li>
+<li><b>btn0:</b> This button adds the number 0 to the input screen. If the addToDisplay flag is false, it sets the input screen to 0. It also sets go flag to true.</li>
+<li><b>btnEqual:</b> This button performs the calculation based on the selected operator, the typed value, and the value on the input screen. It updates the input screen with the result, sets the selected operator to '=', and modifies some variables for further calculations.</li>
+<li><b>btnRoot:</b> This button calculates the square root of the value on the input screen and updates the input screen with the result. It sets the selected operator to 'a' and modifies some variables for further calculations.</li>
+<li><b>btnPower:</b> This button performs a power operation on the typed value and the value on the input screen, updates the input screen with the result, sets the selected operator to '^', and modifies some variables for further calculations.</li>
+<li><b>btnLog:</b> This button calculates the natural logarithm of the value on the input screen and updates the input screen with the result. It sets the selected operator to 'l' and modifies some variables for further calculations.</li>
+</ul>
+
+<p>Some buttons are also set to be invisible initially by calling the <code>setVisible(false)</code> method.</p>
+</html></span>
+</mark>
+<p></p>
+<div data-lexical-github-code-id="426d94b0-d573-4360-90b3-3cf589bc8aa0" data-lexical-github-linkedMarkNode-id="323" data-lexical-github-document-id="6774acd5-4ea0-4ca0-82e6-301d9ffc3717"></div>
+<p></p>
+
+
+<mark data-lexical-mark-id="977">
+  <span><html>
+<h1>Function name: createComboBox</h1>
+<h3><b>Input:</b></h3>
+<p><b>items:</b> An array of strings representing the options for the combo box.</p>
+<p><b>x:</b> An integer representing the x-coordinate for the position of the combo box.</p>
+<p><b>y:</b> An integer representing the y-coordinate for the position of the combo box.</p>
+<p><b>toolTip:</b> A string representing the tooltip text to be displayed when hovering over the combo box.</p>
+<h3><b>Output:</b></h3>
+<p><b>combo:</b> A JComboBox object representing the created combo box.</p>
+<h3><b>Description:</b></h3>
+<p>This function takes in an array of string items, x and y coordinates, and a tooltip text and creates a JComboBox object with the specified items as options. It then sets the bounds of the combo box to the specified x and y coordinates and sets the tooltip text. The cursor of the combo box is also set to a hand cursor. The combo box is added to a window and finally, the created combo box is returned.</p>
+</html></span>
+</mark>
+<p></p>
+<div data-lexical-github-code-id="bf39dae2-8a8a-4ec5-a2f4-45da4170f0d7" data-lexical-github-linkedMarkNode-id="977" data-lexical-github-document-id="6774acd5-4ea0-4ca0-82e6-301d9ffc3717"></div>
+<p></p>
+
+
+<mark data-lexical-mark-id="899">
+  <span><html>
+<h1>Function name: createButton</h1>
+<h3><b>Input:</b></h3>
+<p><b>label:</b> A string representing the label of the button.</p>
+<p><b>x:</b> An integer representing the x-coordinate of the button's position.</p>
+<p><b>y:</b> An integer representing the y-coordinate of the button's position.</p>
+<h3><b>Output:</b></h3>
+<p>The function returns a JButton object.</p>
+<h3><b>Description:</b></h3>
+<p>This function creates and configures a JButton object with the provided label, position, and appearance. Here's what it does:</p>
+<ol>
+  <li>Create a new JButton object using the provided label.</li>
+  <li>Set the position and size of the button using the <code>x</code> and <code>y</code> coordinates, as well as the predefined constants <code>BUTTON_WIDTH</code> and <code>BUTTON_HEIGHT</code>.</li>
+  <li>Set the font of the button to "Comic Sans MS" with a plain style and a size of 28.</li>
+  <li>Set the cursor of the button to a hand cursor, indicating that it can be clicked.</li>
+  <li>Disable the button's ability to gain focus, ensuring that it doesn't interfere with keyboard navigation.</li>
+  <li>Add the button to the <code>window</code>, assuming that <code>window</code> refers to a container where the button will be displayed.</li>
+  <li>Return the created button so that it can be used or stored in a variable. </li>
+</ol>
+</html></span>
+</mark>
+<p></p>
+<div data-lexical-github-code-id="1a784bfb-0a35-4937-a882-b2bb7f620e6c" data-lexical-github-linkedMarkNode-id="899" data-lexical-github-document-id="6774acd5-4ea0-4ca0-82e6-301d9ffc3717"></div>
+<p></p>
+
+
+<mark data-lexical-mark-id="76">
+  <span><html>
+    <h1>Function name: applyTheme</h1>
+    <h3><b>Input:</b></h3>
+    <p><b>theme :</b> An object of the Theme class that contains various properties for customizing the application's appearance.</p>
+    <h3><b>Output:</b></h3>
+    <p>No specific output. This function applies the provided theme to various UI elements of the application.</p>
+    <h3><b>Description:</b></h3>
+    <p>This function is responsible for applying the provided theme to the different UI elements of the application. It takes a Theme object as an input and uses its properties to set the background, foreground, and color of various components.</p>
+    <p>The `applyTheme` function is called with a Theme object as `theme`.</p>
+    <p>First, it sets the background color of the `window.getContentPane()` to the corresponding color specified by `theme.getApplicationBackground()`. This function `hex2Color(theme.getApplicationBackground())` converts the hexadecimal color code to the actual color value.</p>
+    <p>Next, it sets the foreground (text color) of various UI components such as `comboCalculatorType`, `comboTheme`, `inputScreen`, `btn0`, `btn1`, ..., `btnEqual` using the same `hex2Color(theme.getTextColor())` function.</p>
+    <p>Similarly, it sets the background color of various buttons (`btn0`, `btn1`, ..., `btnEqual`) and other UI components such as `comboCalculatorType`, `comboTheme`, and `inputScreen` to the respective color values specified by the `theme` object's properties (e.g., `theme.getNumbersBackground()`, `theme.getOperatorBackground()`, `theme.getBtnEqualBackground()`, etc.) using the `hex2Color()` function.</p>
+</html></span>
+</mark>
+<p></p>
+<div data-lexical-github-code-id="d1b24172-d1ef-4605-83e4-6d98eb249ec4" data-lexical-github-linkedMarkNode-id="76" data-lexical-github-document-id="6774acd5-4ea0-4ca0-82e6-301d9ffc3717"></div>
+<p></p>
+
+
+inner_class
+</span>
+</mark>
+<p></p>
+<div data-lexical-github-code-id="e63ccb0c-6aff-475f-8581-693e396cf549" data-lexical-github-linkedMarkNode-id="380" data-lexical-github-document-id="6774acd5-4ea0-4ca0-82e6-301d9ffc3717"></div>
+<p></p>
+
