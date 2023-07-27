@@ -5,3 +5,6 @@ out/
 
 # Maven
 target/
+
+knowl_results
+knowl_tools
